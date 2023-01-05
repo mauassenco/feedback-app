@@ -1,11 +1,13 @@
 import { useState } from "react";
+import RatingSelect from "../RatingSelect";
 import Button from "../shared/Button";
 import Card from "../shared/Card";
 
-function FeddbackForm() {
+function FeddbackForm({handleAdd}) {
   const [text, setText] = useState('');
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [formValidationMessage, setFormValidationMessage] = useState('')
+  const [rating, setRating] = useState(10)
 
   const handleTextChange = (e) => {
     if(text === ''){
@@ -17,14 +19,27 @@ function FeddbackForm() {
     }else {
       setBtnDisabled(false)
       setFormValidationMessage(null)
-    }
+    }    
     setText(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if(text.trim().length > 10){
+      const newFeedback = {
+        text,
+        rating
+      }
+      handleAdd(newFeedback)
+      setText('')
+    }
+  }
+
   return (
     <Card>
-      <form>
-        <h4>How would you rate your experince with us ?</h4>
+      <form onSubmit={handleSubmit}>
+        <h2>How would you rate your experince with us ?</h2>
+        <RatingSelect select={(rating)=>{setRating(rating)}}/>
         <div className="input-group">
           <input
             type="text"
