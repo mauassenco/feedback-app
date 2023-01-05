@@ -7,6 +7,7 @@ function FeedbackList({ feedback, handleDelete }) {
     return <p>No feedbacks yet !</p>;
   }
 
+  
   return (
     <div className="feedback-list">
       <AnimatePresence>
@@ -14,9 +15,10 @@ function FeedbackList({ feedback, handleDelete }) {
           return (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, scale: 0, height: 0 }}
+              animate={{ opacity: 1, scale: 1, height: "fit-content"  }}
+              exit={{ opacity: 0, scale: 0, height: 0}}
+              transition={{ duration: 0.5 }}
             >
               <FeedbackItem
                 key={item.id}
