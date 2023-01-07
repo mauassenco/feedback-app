@@ -13,6 +13,7 @@ This is a project from my React Front To Back 2022 course. It allows users to ad
 * Forms
 * Context API
 * HTTP Requests
+* Routes ( React Router )
 ## Usage
 ### Install dependencies
 `npm install`
