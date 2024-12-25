@@ -1,37 +1,58 @@
-import { useState } from "react";
-import RatingSelect from "../RatingSelect";
-import Button from "../shared/Button";
-import Card from "../shared/Card";
+import { useState, useContext, useEffect } from "react"
+import FeedbackContext from "../../context/FeedbackContext"
+import RatingSelect from "../RatingSelect"
+import Button from "../shared/Button"
+import Card from "../shared/Card"
 
-function FeddbackForm({handleAdd}) {
-  const [text, setText] = useState('');
+function FeddbackForm() {
+  const [text, setText] = useState("")
   const [btnDisabled, setBtnDisabled] = useState(true)
-  const [formValidationMessage, setFormValidationMessage] = useState('')
-  const [rating, setRating] = useState(10)
+  const [formValidationMessage, setFormValidationMessage] = useState("")
+  const [rating, setRating] = useState(0)
+
+  const { addFeedback, feedbackEdit, updateFeedback } = useContext(FeedbackContext)
+
+  useEffect(() => {
+    if (feedbackEdit.edit === true) {
+      setBtnDisabled(false)
+      setText(feedbackEdit.item.text)
+      setRating(feedbackEdit.item.rating)
+    }
+  }, [feedbackEdit])
 
   const handleTextChange = (e) => {
-    if(text === ''){
+    if (text === "") {
       setBtnDisabled(true)
       setFormValidationMessage(null)
-    }else if(text !== '' && text.trim().length <= 10){
+    } else if (text !== "" && text.trim().length <= 10) {
       setBtnDisabled(true)
-      setFormValidationMessage('Review message must have at least 10 characters')
-    }else {
+      setFormValidationMessage(
+        "Review message must have at least 10 characters",
+      )
+    } else {
       setBtnDisabled(false)
       setFormValidationMessage(null)
-    }    
-    setText(e.target.value);
-  };
+    }
+    setText(e.target.value)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if(text.trim().length > 10){
+    if (text.trim().length > 10) {
       const newFeedback = {
         text,
-        rating
+        rating,
       }
-      handleAdd(newFeedback)
-      setText('')
+
+      if(feedbackEdit.edit === true) {
+        updateFeedback(feedbackEdit.item.id, newFeedback)
+      }else{
+        addFeedback(newFeedback)
+      }
+
+      setText("")
+      setBtnDisabled(true)
+      setRating(0)
     }
   }
 
@@ -39,7 +60,11 @@ function FeddbackForm({handleAdd}) {
     <Card>
       <form onSubmit={handleSubmit}>
         <h2>How would you rate your experince with us ?</h2>
-        <RatingSelect select={(rating)=>{setRating(rating)}}/>
+        <RatingSelect
+          select={(rating) => {
+            setRating(rating)
+          }}
+        />
         <div className="input-group">
           <input
             type="text"
@@ -52,9 +77,11 @@ function FeddbackForm({handleAdd}) {
           </Button>
         </div>
       </form>
-      {formValidationMessage && <div className="message">{formValidationMessage}</div>}
+      {formValidationMessage && (
+        <div className="message">{formValidationMessage}</div>
+      )}
     </Card>
-  );
+  )
 }
 
-export default FeddbackForm;
+export default FeddbackForm
