@@ -25,4 +25,4 @@ This is a project from my React Front To Back 2022 course. It allows users to ad
 ### Run
 
 `npm run dev`
-This will run JSON-server on port :5000 and React on port :3000
+This will run JSON-server on port :5050 and React on port :3000
